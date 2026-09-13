@@ -106,7 +106,7 @@
                 "position": [153, 418] 
             },
             {
-                "sleep": 1 
+                "sleep": 1.5 
             },               
             {
                 "set_state": "switched" 
@@ -121,15 +121,17 @@
             "redundancy": 30,
             "condition": "switched"
         },
-        "actions":
-        [   
-            {
-                "position": [1637, 960]
-            },
-            {
-                "set_state": "difficulty_select"
-            }
-        ]
+      "actions": [
+        {
+          "position": [ 1637, 960 ]
+        },
+        {
+          "sleep": 0.5
+        },
+        {
+          "set_state": "difficulty_select"
+        }
+      ]
     },
     {
         "name": "选择难度后开始对局",
@@ -249,7 +251,7 @@
         "actions":
         [
             {
-                "position": [921, 345]
+                "position": [921, 310]
             },
             {
                 "position": [1491, 563]
@@ -353,7 +355,7 @@
         "actions":
         [
             {
-                "position": [809, 291]
+                "position": [809, 210]
             }
         ]
     },
@@ -401,21 +403,30 @@
             "redundancy":30,
             "condition":"1-1"
         },
-        "actions":[
-            {"sleep":5},
-            {
-                "drag": [0.7703, 0.1569, 0.6107, 0.6306]
-            },
-            {
-                "drag": [0.7047, 0.1560, 0.5354, 0.6310]
-            },
-            {
-                "drag": [0.6396, 0.1551, 0.4617, 0.6310]
-            },
-            {
-                "set_state": "startbattle"
-            }
-        ]
+      "actions": [
+        { "sleep": 5 },
+        {
+          "drag": [ 0.7703, 0.1569, 0.6107, 0.6306 ]
+        },
+        {
+          "sleep": 0.5
+        },
+        {
+          "drag": [ 0.7047, 0.1560, 0.5354, 0.6310 ]
+        },
+        {
+          "sleep": 0.5
+        },
+        {
+          "drag": [ 0.6396, 0.1551, 0.4617, 0.6310 ]
+        },
+        {
+          "sleep": 0.5
+        },
+        {
+          "set_state": "startbattle"
+        }
+      ]
     },
     {
         "name":"跳过战斗",

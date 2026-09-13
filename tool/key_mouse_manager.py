@@ -336,6 +336,10 @@ class KeyMouseManager:
         如果当前队列为空则直接返回，否则等待直至队列为空
         """
         while True:
+            #congcongzai update # 修复货币战争结束后线程未正常退出的问题，解决wait() 没有监听 self.running的小bug
+            if not self.running:
+                return
+            #end
             # 如果队列为空或者只有"stop"信号，则返回
             if not len(self.operation_queue) and self.ending:
                 return

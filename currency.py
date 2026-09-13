@@ -197,6 +197,9 @@ class SimulatedCurrency(CurrencyUtils):
             return True
 
         key_mouse_manager.clean()
+        #congcongzai fix # 网速不佳时点击太快 有概率导致程序永久卡死 故增加等待时间
+        time.sleep(0.5)
+        #end
         key_mouse_manager.click(1692, 965, force=True)  # “开始对局”按钮坐标
         key_mouse_manager.wait()
         self.update_state("startbattle")
@@ -247,6 +250,10 @@ class SimulatedCurrency(CurrencyUtils):
                 for idx, text in enumerate (texts):
                     if pri in text:
                         CUS_LOGGER.info (f"匹配到必选策略: {pri}，选择选项{idx+1}")
+                        #congcongzai update # 增加未刷出prior环境直接重开的功能，若刷出则将退出位面设为2
+                        self.exit_plane = 2
+                        CUS_LOGGER.info("检测到必选策略，本局退出位面调整为第2面")
+                        # end
                         return True, idx
             return False, -1
         texts = self.recognize_options (self.ENVIR_BOXES)
@@ -285,7 +292,6 @@ class SimulatedCurrency(CurrencyUtils):
                 selected_idx = 1
                 CUS_LOGGER.warning("未匹配到任何优先级策略，默认选择中间")
 
-
         if any("银金彩" in text for text in texts):
             self.max_refresh = 3
             CUS_LOGGER.info("选择银金彩，已将刷新次数调整至3次")
@@ -313,6 +319,13 @@ class SimulatedCurrency(CurrencyUtils):
         self.investment_tracker.reset()
         self.update_state("1-1")
         CUS_LOGGER.info ("投资环境选择完成")
+        #congcongzai update # 增加未刷出prior环境直接重开的功能，若未刷出（退出位面=1）则直接退出
+        if self.exit_plane != 2:
+            CUS_LOGGER.info ("未随机出指定投资环境，直接重开")
+            time.sleep(5)
+            key_mouse_manager.press('esc') #退出位面
+            time.sleep(0.1)
+        #end
         return 1
 
     def _confirm_environment_selection(self):
@@ -349,6 +362,14 @@ class SimulatedCurrency(CurrencyUtils):
                 continue
 
             selected_idx = available[0]
+            #congcongzai update # 蓝海额外环境如果刷出 prior 策略，则调整退出位面
+            for pri in self.tk.prior_envir:
+                if pri in texts[selected_idx]:
+                    CUS_LOGGER.info(f"蓝海生效时匹配到必选策略: {pri}，选择额外环境")
+                    self.exit_plane = 2
+                    CUS_LOGGER.info("蓝海生效时检测到必选策略，本局退出位面调整为第2面")
+                    break
+            # end
             key_mouse_manager.click(*centers[selected_idx])
             key_mouse_manager.wait()
             time.sleep(0.4)
@@ -636,6 +657,11 @@ class SimulatedCurrency(CurrencyUtils):
             CUS_LOGGER.warning("未找到本局开始记录，跳过货币战争对局统计")
         else:
             CUS_LOGGER.info(f"货币战争对局记录完成：{record}")
+
+        #congcongzai update # 增加未刷出prior环境直接重开的功能，重置退出位面（此处settings里设置为1）
+        self.exit_plane = 1
+        CUS_LOGGER.info("本局结束，退出位面恢复为第1面")
+	    #end
 
     def do_action(self, action) -> int:
         """

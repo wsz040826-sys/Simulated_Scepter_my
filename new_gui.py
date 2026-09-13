@@ -109,6 +109,15 @@ class MainWindow(QMainWindowLog):
 
         if self.current_task and hasattr(self.current_task, 'stop'):
             self.current_task.stop()
+            #congcongzai update # 修复货币战争结束后线程未正常退出的问题；增加等待模块，等待货币战争线程结束
+            if self.task_thread:
+                self.task_thread.join(timeout=3)
+
+            if self.task_thread and self.task_thread.is_alive():
+                self.Label_RunningState.setText("任务序列线程状态: 停止中")
+                set_global_stop_flag(False)
+                return False
+            #end
             self.task_thread = None
             self.current_task = None
             # 更新任务状态标签为"未运行"
@@ -687,8 +696,6 @@ class MainWindow(QMainWindowLog):
     def run_finger_snap(self):
         can_run = (
             self.opt.get("debug", True)
-            and self.opt.get("recording_iron_blood", True)
-            and self.opt.get("record_add_label", True)
         )
         if not can_run:
             QMessageBox.information(
