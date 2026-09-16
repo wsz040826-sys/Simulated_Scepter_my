@@ -1126,7 +1126,7 @@ border:none</string>
              <item>
               <widget class="QLabel" name="Currency_exit_plane_label">
                <property name="text">
-                <string>退出位面：</string>
+                <string>退出位面（在设定位面完成投资策略选择后即退出）：</string>
                </property>
               </widget>
              </item>

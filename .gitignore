@@ -53,3 +53,6 @@ tp
 utils/mylib/
 update.py
 update.bat
+info.yml
+resource/imgs/roll_count_num/unmatched/
+tool/simul/config/

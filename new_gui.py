@@ -723,6 +723,8 @@ class MainWindow(QMainWindowLog):
     def run_finger_snap(self):
         can_run = (
             self.opt.get("debug", True)
+            and self.opt.get("recording_iron_blood", True)
+            and self.opt.get("record_add_label", True)
         )
         if not can_run:
             QMessageBox.information(
